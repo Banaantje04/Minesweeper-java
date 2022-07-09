@@ -1,6 +1,5 @@
 package minesweeper;
 
-import javax.swing.*;
 import minesweeper.gui.MainGui;
 
 public class MainApp {

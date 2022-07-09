@@ -3,7 +3,7 @@ package minesweeper.gui;
 import java.awt.*;
 import javax.swing.*;
 
-import minesweeper.gui.components.MineGrid;
+import minesweeper.gui.components.MineGridGui;
 
 public class MainGui {
 	private JFrame frame;
@@ -18,7 +18,7 @@ public class MainGui {
 	}
 	
 	public void generateAndAddMineGrid(int horizontalCount, int verticalCount) {
-		MineGrid grid = new MineGrid(horizontalCount, verticalCount);
+		MineGridGui grid = new MineGridGui(horizontalCount, verticalCount);
 		
 		GridBagConstraints constraint = new GridBagConstraints();
 		constraint.weightx = 0.5;
