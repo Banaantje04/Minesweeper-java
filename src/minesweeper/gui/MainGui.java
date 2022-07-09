@@ -4,13 +4,18 @@ import java.awt.*;
 import javax.swing.*;
 
 public class MainGui {
-	public static void createAndShowGui() {
-		JFrame frame = new JFrame();
+	private JFrame frame;
+	private Container pane;
+	
+	public MainGui() {
+		frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-//		Container pane = frame.getContentPane();
-//		
-//		pane.add(new JLabel("uwu"));
-		
+		pane = frame.getContentPane();
+	}
+
+	public void setVisible() {
+		frame.pack();
 		frame.setVisible(true);
 	}
 }
