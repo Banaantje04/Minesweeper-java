@@ -3,13 +3,18 @@ package minesweeper.gui;
 import java.awt.*;
 import javax.swing.*;
 
+import minesweeper.backend.MainBackend;
+import minesweeper.backend.MineGrid;
 import minesweeper.gui.components.MineGridGui;
 
 public class MainGui {
 	private JFrame frame;
 	private Container pane;
+	private MainBackend backend;
 	
-	public MainGui() {
+	public MainGui(MainBackend backend) {
+		this.backend = backend;
+		
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -17,15 +22,15 @@ public class MainGui {
 		pane.setLayout(new GridBagLayout());
 	}
 	
-	public void generateAndAddMineGrid(int horizontalCount, int verticalCount) {
-		MineGridGui grid = new MineGridGui(horizontalCount, verticalCount);
+	public void generateAndAddMineGrid(MineGrid grid) {
+		MineGridGui gridGui = new MineGridGui(grid);
 		
 		GridBagConstraints constraint = new GridBagConstraints();
 		constraint.weightx = 0.5;
 		constraint.weighty = 0.5;
 		constraint.fill = GridBagConstraints.BOTH;
 		
-		pane.add(grid.getGridContainer(), constraint);
+		pane.add(gridGui.getGridContainer(), constraint);
 	}
 
 	public void setVisible() {

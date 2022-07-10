@@ -3,6 +3,7 @@
  */
 package minesweeper;
 
+import minesweeper.backend.MainBackend;
 import minesweeper.gui.MainGui;
 
 /**
@@ -12,17 +13,20 @@ import minesweeper.gui.MainGui;
 public class MainApp {
 
 	private MainGui gui;
+	private MainBackend backend;
 	
 	public MainApp() {
-		gui = new MainGui();
+		backend = new MainBackend();
+		backend.createNewMineGrid(14, 14, 20);
 		
-		gui.generateAndAddMineGrid(14, 14);
+		gui = new MainGui(backend);
+		
+		gui.generateAndAddMineGrid(backend.getGrid());
 		
 		gui.setVisible();
 	}
 	
 	public static void main(String[] args) {
-		//dirty way to get around the fact that the main method is static
 		new MainApp();
 	}
 }
