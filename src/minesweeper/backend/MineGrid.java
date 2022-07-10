@@ -83,7 +83,7 @@ public class MineGrid {
 			
 			int[] position = pressedCell.getPosition();
 			
-			if (grid[position[0]][position[1]] == true) {
+			if (grid[position[1]][position[0]] == true) {
 				pressedCell.setClickedState(ClickedState.IS_MINE);
 				System.out.println("triggered mine");
 				
