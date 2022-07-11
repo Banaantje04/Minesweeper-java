@@ -13,6 +13,22 @@ public class MainGui {
 	private MainBackend backend;
 	
 	public MainGui(MainBackend backend) {
+		/*try {
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		
 		this.backend = backend;
 		
 		frame = new JFrame();
@@ -30,7 +46,7 @@ public class MainGui {
 		constraint.weighty = 0.5;
 		constraint.fill = GridBagConstraints.BOTH;
 		
-		pane.add(gridGui.getGridContainer(), constraint);
+		pane.add(gridGui, constraint);
 	}
 
 	public void setVisible() {

@@ -5,8 +5,7 @@ import javax.swing.*;
 
 import minesweeper.backend.MineGrid;
 
-public class MineGridGui {
-	private JPanel gridContainer;
+public class MineGridGui extends JPanel{
 	private MineGrid grid;
 	
 	public MineGridGui(MineGrid grid) {
@@ -17,19 +16,16 @@ public class MineGridGui {
 		int horizontalCount = dimensions[0];
 		int verticalCount = dimensions[1];
 		
-		gridContainer = new JPanel(new GridLayout(verticalCount, horizontalCount));
+		setLayout(new GridLayout(verticalCount, horizontalCount));
+		setPreferredSize(new Dimension(32*horizontalCount, 32*verticalCount));
 		
 		for (int i = 0; i < verticalCount; i++) {
 			for (int j = 0; j < horizontalCount; j++) {
 				MineCell cell = new MineCell(j, i);
 				cell.addActionListener(grid.getCellListener());
 				
-				gridContainer.add(cell);
+				add(cell);
 			}
 		}
-	}
-	
-	public JPanel getGridContainer() {
-		return gridContainer;
 	}
 }
