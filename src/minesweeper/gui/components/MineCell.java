@@ -1,8 +1,5 @@
 package minesweeper.gui.components;
 
-import java.awt.Color;
-import java.awt.Font;
-
 import javax.swing.*;
 
 public class MineCell extends JButton {	
@@ -24,8 +21,9 @@ public class MineCell extends JButton {
 		return position;
 	}
 	
-	public void setClickedState(ClickedState state) {
+	public void setCellState(ClickedState state, Integer amountOfSurroundingMines) {
 		clickedState = state;
+		setText(amountOfSurroundingMines.toString());
 	}
 	
 	public enum ClickedState {

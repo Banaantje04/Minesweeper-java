@@ -94,15 +94,33 @@ public class MineGrid {
 			MineCell pressedCell = (MineCell)e.getSource();
 			
 			int[] position = pressedCell.getPosition();
+			int horizontalPosition = position[0];
+			int verticalPosition = position[1];
 			
-			if (grid[position[1]][position[0]] == true) {
-				pressedCell.setClickedState(ClickedState.IS_MINE);
+			if (grid[verticalPosition][horizontalPosition] == true) {
+				pressedCell.setCellState(ClickedState.IS_MINE, 0);
 				System.out.println("triggered mine");
 				
 				//TODO: add failure
 			}
 			else {
+				int surroundingMinesCount = 0;
 				
+				for (int i = -1; i < 2; i++) {
+					for (int j = -1; j < 2; j++) {
+						if (verticalPosition+i < 0
+								|| verticalPosition+i >= verticalCount
+								|| horizontalPosition+j < 0
+								|| horizontalPosition+j >= horizontalCount)
+							continue;
+						
+						if (grid[verticalPosition+i][horizontalPosition+j])
+							surroundingMinesCount++;
+					}
+				}
+				
+				pressedCell.setCellState(ClickedState.IS_CLEAR, surroundingMinesCount);
+				System.out.println(surroundingMinesCount);
 			}
 		}
 		

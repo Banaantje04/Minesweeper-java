@@ -7,8 +7,7 @@ import minesweeper.backend.MainBackend;
 import minesweeper.backend.MineGrid;
 import minesweeper.gui.components.MineGridGui;
 
-public class MainGui {
-	private JFrame frame;
+public class MainGui extends JFrame {
 	private Container pane;
 	private MainBackend backend;
 	
@@ -31,10 +30,9 @@ public class MainGui {
 		
 		this.backend = backend;
 		
-		frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		pane = frame.getContentPane();
+		pane = getContentPane();
 		pane.setLayout(new GridBagLayout());
 	}
 	
@@ -50,7 +48,7 @@ public class MainGui {
 	}
 
 	public void setVisible() {
-		frame.pack();
-		frame.setVisible(true);
+		pack();
+		setVisible(true);
 	}
 }
