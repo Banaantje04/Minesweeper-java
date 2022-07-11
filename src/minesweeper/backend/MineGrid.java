@@ -40,21 +40,33 @@ public class MineGrid {
 	}
 
 	private void generateRandomLayout() {
-		Random rand = new Random();
 		
-		grid = new boolean[horizontalCount][verticalCount];
+		grid = new boolean[verticalCount][horizontalCount];
 		
 		for (int i = 0; i < amountOfMines; i++) {
-			grid[rand.nextInt(horizontalCount)][rand.nextInt(verticalCount)] = true;
+			addRandomMine();
 		}
 		
 		if (!ensureCorrectAmountOfMines()) {
+			System.out.println("this should not happen");
 			//just run it again and hope this doesn't happen too often lol
 			generateRandomLayout();
 		}
 		
 
 		System.out.println(Arrays.deepToString(grid).replace("]", "]\n").replace("false", "0").replace("true", "1"));
+	}
+
+	private void addRandomMine() {
+		Random rand = new Random();
+		
+		int randHorizontal = rand.nextInt(horizontalCount);
+		int randVertical = rand.nextInt(verticalCount);
+		
+		if (grid[randVertical][randHorizontal] == false)
+			grid[randVertical][randHorizontal] = true;
+		else
+			addRandomMine();
 	}
 	
 	private boolean ensureCorrectAmountOfMines() {
