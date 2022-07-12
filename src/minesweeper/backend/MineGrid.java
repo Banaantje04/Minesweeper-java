@@ -3,6 +3,7 @@ package minesweeper.backend;
 import java.awt.event.*;
 import java.util.Random;
 import java.util.Arrays;
+import javax.swing.SwingUtilities;
 import minesweeper.gui.components.*;
 import minesweeper.gui.components.MineCell.CellState;
 
@@ -85,51 +86,37 @@ public class MineGrid {
 			return true;
 	}
 	
-	public class MineGridCellPressedListener implements ActionListener {
-		
-		private MineGridGui guiGrid;
-
-		public MineGridCellPressedListener(MineGridGui guiGrid) {
-			this.guiGrid = guiGrid;
+	private void revealCell(MineCell mineCell, int horizontalPosition, int verticalPosition) {
+		if (mineCell.getCellState() != CellState.NOT_CLICKED) {
+			System.out.println("already clicked");
+			return;
 		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			System.out.println("pressed cell");
+		
+		if (grid[verticalPosition][horizontalPosition] == true) {
+			mineCell.revealCell(CellState.IS_MINE, 0);
+			System.out.println("triggered mine");
 			
-			MineCell pressedCell = (MineCell)e.getSource();
+			//TODO: add failure
+		}
+		else {
+			int surroundingMinesCount = 0;
 			
-			int[] position = pressedCell.getPosition();
-			int horizontalPosition = position[0];
-			int verticalPosition = position[1];
-			
-			//cheaty reveal everything for debug purposes
-			if (horizontalPosition == 0 && verticalPosition == 0) {
-				for (int i = 0; i < horizontalCount; i++ ) {
-					for (int j = 0; j < verticalCount; j++) {
-						revealCell(i, j);
-					}
+			for (int i = -1; i < 2; i++) {
+				for (int j = -1; j < 2; j++) {
+					if (verticalPosition+i < 0
+							|| verticalPosition+i >= verticalCount
+							|| horizontalPosition+j < 0
+							|| horizontalPosition+j >= horizontalCount)
+						continue;
+					
+					if (grid[verticalPosition+i][horizontalPosition+j])
+						surroundingMinesCount++;
 				}
 			}
 			
-			revealCell(pressedCell, horizontalPosition, verticalPosition);
-		}
-
-		private void revealCell(MineCell mineCell, int horizontalPosition, int verticalPosition) {
-			if (mineCell.getCellState() != CellState.NOT_CLICKED) {
-				System.out.println("already clicked");
-				return;
-			}
+			mineCell.revealCell(CellState.IS_CLEAR, surroundingMinesCount);
 			
-			if (grid[verticalPosition][horizontalPosition] == true) {
-				mineCell.revealCell(CellState.IS_MINE, 0);
-				System.out.println("triggered mine");
-				
-				//TODO: add failure
-			}
-			else {
-				int surroundingMinesCount = 0;
-				
+			if (surroundingMinesCount == 0) {
 				for (int i = -1; i < 2; i++) {
 					for (int j = -1; j < 2; j++) {
 						if (verticalPosition+i < 0
@@ -138,40 +125,59 @@ public class MineGrid {
 								|| horizontalPosition+j >= horizontalCount)
 							continue;
 						
-						if (grid[verticalPosition+i][horizontalPosition+j])
-							surroundingMinesCount++;
-					}
-				}
-				
-				mineCell.revealCell(CellState.IS_CLEAR, surroundingMinesCount);
-				
-				if (surroundingMinesCount == 0) {
-					for (int i = -1; i < 2; i++) {
-						for (int j = -1; j < 2; j++) {
-							if (verticalPosition+i < 0
-									|| verticalPosition+i >= verticalCount
-									|| horizontalPosition+j < 0
-									|| horizontalPosition+j >= horizontalCount)
-								continue;
-							
-							revealCell(horizontalPosition+j, verticalPosition+i);
-						}
+						revealCell(horizontalPosition+j, verticalPosition+i);
 					}
 				}
 			}
 		}
-		
-		private void revealCell(int horizontalPosition, int verticalPosition) {
-			MineCell cell = guiGrid.getMineCell(horizontalPosition, verticalPosition);
-			
-			revealCell(cell, horizontalPosition, verticalPosition);
-		}
-		
 	}
 	
-//	public static void main(String[] args) {
-//		MineGrid grid = new MineGrid(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]));
-//		
-//		System.out.println(Arrays.deepToString(grid.grid).replace("]", "]\n").replace("false", "0").replace("true", "1"));
-//	}
+	private void revealCell(int horizontalPosition, int verticalPosition) {
+		MineCell cell = cellListener.guiGrid.getMineCell(horizontalPosition, verticalPosition);
+		
+		revealCell(cell, horizontalPosition, verticalPosition);
+	}
+	
+	public class MineGridCellPressedListener extends MouseAdapter {
+		
+		private MineGridGui guiGrid;
+
+		public MineGridCellPressedListener(MineGridGui guiGrid) {
+			this.guiGrid = guiGrid;
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			MineCell pressedCell = (MineCell)e.getSource();
+			
+			if (!pressedCell.isEnabled()) {
+				return;
+			}
+			
+			System.out.println("pressed cell");
+			
+			if (SwingUtilities.isRightMouseButton(e)) {
+				pressedCell.flagCell();
+			}
+			else if (pressedCell.getCellState() == CellState.IS_FLAGGED) {
+				pressedCell.removeFlag();
+			}
+			else {
+				int[] position = pressedCell.getPosition();
+				int horizontalPosition = position[0];
+				int verticalPosition = position[1];
+			
+				//cheaty reveal everything for debug purposes
+				if (horizontalPosition == 0 && verticalPosition == 0) {
+					for (int i = 0; i < horizontalCount; i++ ) {
+						for (int j = 0; j < verticalCount; j++) {
+							revealCell(i, j);
+						}
+					}
+				}
+			
+				revealCell(pressedCell, horizontalPosition, verticalPosition);
+			}
+		}
+	}
 }

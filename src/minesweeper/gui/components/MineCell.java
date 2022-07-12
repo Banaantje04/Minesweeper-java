@@ -7,12 +7,11 @@ import javax.swing.*;
 public class MineCell extends JButton {	
 	private int horizontalPosition;
 	private int verticalPosition;
-	private CellState cellState;
+	private CellState cellState = CellState.NOT_CLICKED;
 	
 	public MineCell(int horizontalPos, int verticalPos) {
 		horizontalPosition = horizontalPos;
 		verticalPosition = verticalPos;
-		cellState = CellState.NOT_CLICKED;
 	}
 	
 	public int[] getPosition(){
@@ -33,8 +32,22 @@ public class MineCell extends JButton {
 		
 		if (cellState == CellState.IS_MINE)
 			setIcon(new ImageIcon(this.getClass().getResource("/assets/Mine.png")));
-		else
-			setText(amountOfSurroundingMines.toString());
+		else {
+			setText(amountOfSurroundingMines == 0 ? "" : amountOfSurroundingMines.toString());
+			setEnabled(false);
+		}
+	}
+	
+	public void flagCell() {
+		cellState = CellState.IS_FLAGGED;
+		
+		setIcon(new ImageIcon(this.getClass().getResource("/assets/Flag.png")));
+	}
+	
+	public void removeFlag() {
+		cellState = CellState.NOT_CLICKED;
+		
+		setIcon(null);
 	}
 	
 	public enum CellState {

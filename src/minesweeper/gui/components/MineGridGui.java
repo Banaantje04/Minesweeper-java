@@ -29,7 +29,7 @@ public class MineGridGui extends JPanel{
 		for (int i = 0; i < verticalCount; i++) {
 			for (int j = 0; j < horizontalCount; j++) {
 				MineCell cell = new MineCell(j, i);
-				cell.addActionListener(cellListener);
+				cell.addMouseListener(cellListener);
 				
 				add(cell);
 				cellGrid[i][j] = cell;
