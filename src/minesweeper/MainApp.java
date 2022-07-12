@@ -17,7 +17,7 @@ public class MainApp {
 	
 	public MainApp() {
 		backend = new MainBackend();
-		backend.createNewMineGrid(30, 16, 99);
+		backend.createNewMineGrid(30, 16, 150);
 		
 		gui = new MainGui(backend);
 		

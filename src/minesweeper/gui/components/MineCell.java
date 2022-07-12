@@ -30,12 +30,15 @@ public class MineCell extends JButton {
 	public void revealCell(CellState state, Integer amountOfSurroundingMines) {
 		cellState = state;
 		
-		if (cellState == CellState.IS_MINE)
+		if (cellState == CellState.IS_MINE) {
 			setIcon(new ImageIcon(this.getClass().getResource("/assets/Mine.png")));
-		else {
-			setText(amountOfSurroundingMines == 0 ? "" : amountOfSurroundingMines.toString());
-			setEnabled(false);
+			setDisabledIcon(new ImageIcon(this.getClass().getResource("/assets/Mine.png")));
 		}
+		else {
+			setIcon(amountOfSurroundingMines != 0 ? new ImageIcon(this.getClass().getResource(String.format("/assets/%s.png", amountOfSurroundingMines))) : null);
+			setDisabledIcon(amountOfSurroundingMines != 0 ? new ImageIcon(this.getClass().getResource(String.format("/assets/%s.png", amountOfSurroundingMines))) : null);
+		}
+		setEnabled(false);
 	}
 	
 	public void flagCell() {

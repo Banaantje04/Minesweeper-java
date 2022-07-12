@@ -87,7 +87,7 @@ public class MineGrid {
 	}
 	
 	private void revealCell(MineCell mineCell, int horizontalPosition, int verticalPosition) {
-		if (mineCell.getCellState() != CellState.NOT_CLICKED) {
+		if (mineCell.getCellState() != CellState.NOT_CLICKED && mineCell.getCellState() != CellState.IS_FLAGGED) {
 			System.out.println("already clicked");
 			return;
 		}
