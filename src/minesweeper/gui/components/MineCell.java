@@ -1,15 +1,18 @@
 package minesweeper.gui.components;
 
+import java.net.URL;
+
 import javax.swing.*;
 
 public class MineCell extends JButton {	
 	private int horizontalPosition;
 	private int verticalPosition;
-	private ClickedState clickedState;
+	private CellState cellState;
 	
 	public MineCell(int horizontalPos, int verticalPos) {
 		horizontalPosition = horizontalPos;
 		verticalPosition = verticalPos;
+		cellState = CellState.NOT_CLICKED;
 	}
 	
 	public int[] getPosition(){
@@ -21,12 +24,20 @@ public class MineCell extends JButton {
 		return position;
 	}
 	
-	public void setCellState(ClickedState state, Integer amountOfSurroundingMines) {
-		clickedState = state;
-		setText(amountOfSurroundingMines.toString());
+	public CellState getCellState() {
+		return cellState;
 	}
 	
-	public enum ClickedState {
+	public void revealCell(CellState state, Integer amountOfSurroundingMines) {
+		cellState = state;
+		
+		if (cellState == CellState.IS_MINE)
+			setIcon(new ImageIcon(this.getClass().getResource("/assets/Mine.png")));
+		else
+			setText(amountOfSurroundingMines.toString());
+	}
+	
+	public enum CellState {
 		NOT_CLICKED,
 		IS_MINE,
 		IS_CLEAR,
