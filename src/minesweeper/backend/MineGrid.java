@@ -12,6 +12,8 @@ public class MineGrid {
 	private boolean[][] grid;
 	private boolean gridGenerated = false;
 	
+	private GameState gameState = GameState.NotStarted;
+	
 	private int horizontalCount;
 	private int verticalCount;
 	private int amountOfMines;
@@ -56,6 +58,7 @@ public class MineGrid {
 
 		System.out.println(Arrays.deepToString(grid).replace("]", "]\n").replace("false", "0").replace("true", "1"));
 		gridGenerated = true;
+		gameState = GameState.Started;
 	}
 
 	private void addRandomMine(int startPositionHorizontal, int startPositionVertical) {
@@ -100,7 +103,17 @@ public class MineGrid {
 			mineCell.revealCell(CellState.IS_MINE, 0);
 			System.out.println("triggered mine");
 			
-			//TODO: add failure
+			//weird way to not make it infinitely loop
+			if (gameState != GameState.Failed) {
+				gameState = GameState.Failed;
+				for (int i = 0; i < verticalCount; i++) {
+					for (int j = 0; j < horizontalCount; j++) {
+						if (grid[i][j]) {
+							revealCell(j, i);
+						}
+					}
+				}
+			}
 		}
 		else {
 			int surroundingMinesCount = 0;
@@ -187,5 +200,12 @@ public class MineGrid {
 				revealCell(pressedCell, horizontalPosition, verticalPosition);
 			}
 		}
+	}
+	
+	private enum GameState {
+		NotStarted,
+		Started,
+		Failed,
+		Completed
 	}
 }
