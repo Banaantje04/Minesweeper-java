@@ -10,6 +10,7 @@ import minesweeper.gui.components.MineCell.CellState;
 public class MineGrid {
 	
 	private boolean[][] grid;
+	private boolean gridGenerated = false;
 	
 	private int horizontalCount;
 	private int verticalCount;
@@ -21,8 +22,6 @@ public class MineGrid {
 		this.horizontalCount = horizontalCount;
 		this.verticalCount = verticalCount;
 		this.amountOfMines = amountOfMines;
-		
-		generateRandomLayout();
 	}
 	
 	public int[] getDimensions() {
@@ -40,34 +39,39 @@ public class MineGrid {
 		return cellListener;
 	}
 
-	private void generateRandomLayout() {
+	private void generateRandomLayout(int startPositionHorizontal, int startPositionVertical) {
 		
 		grid = new boolean[verticalCount][horizontalCount];
 		
 		for (int i = 0; i < amountOfMines; i++) {
-			addRandomMine();
+			addRandomMine(startPositionHorizontal, startPositionVertical);
 		}
 		
 		if (!ensureCorrectAmountOfMines()) {
 			System.out.println("this should not happen");
 			//just run it again and hope this doesn't happen too often lol
-			generateRandomLayout();
+			generateRandomLayout(startPositionHorizontal, startPositionVertical);
 		}
 		
 
 		System.out.println(Arrays.deepToString(grid).replace("]", "]\n").replace("false", "0").replace("true", "1"));
+		gridGenerated = true;
 	}
 
-	private void addRandomMine() {
+	private void addRandomMine(int startPositionHorizontal, int startPositionVertical) {
 		Random rand = new Random();
 		
 		int randHorizontal = rand.nextInt(horizontalCount);
 		int randVertical = rand.nextInt(verticalCount);
 		
-		if (grid[randVertical][randHorizontal] == false)
+		if (grid[randVertical][randHorizontal] == false
+				&& !((randHorizontal >= startPositionHorizontal-1 && randHorizontal <= startPositionHorizontal+1)
+				&& (randVertical >= startPositionVertical-1 && randVertical <= startPositionVertical+1))) {
+			
 			grid[randVertical][randHorizontal] = true;
+		}
 		else
-			addRandomMine();
+			addRandomMine(startPositionHorizontal, startPositionVertical);
 	}
 	
 	private boolean ensureCorrectAmountOfMines() {
@@ -156,17 +160,21 @@ public class MineGrid {
 			
 			System.out.println("pressed cell");
 			
+			int[] position = pressedCell.getPosition();
+			int horizontalPosition = position[0];
+			int verticalPosition = position[1];
+			
+			if (!gridGenerated) {
+				generateRandomLayout(horizontalPosition, verticalPosition);
+			}
+			
 			if (SwingUtilities.isRightMouseButton(e)) {
 				pressedCell.flagCell();
 			}
 			else if (pressedCell.getCellState() == CellState.IS_FLAGGED) {
 				pressedCell.removeFlag();
 			}
-			else {
-				int[] position = pressedCell.getPosition();
-				int horizontalPosition = position[0];
-				int verticalPosition = position[1];
-			
+			else {			
 				//cheaty reveal everything for debug purposes
 				if (horizontalPosition == 0 && verticalPosition == 0) {
 					for (int i = 0; i < horizontalCount; i++ ) {

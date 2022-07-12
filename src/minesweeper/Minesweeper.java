@@ -10,14 +10,14 @@ import minesweeper.gui.MainGui;
  * @author sarah
  *
  */
-public class MainApp {
+public class Minesweeper {
 
 	private MainGui gui;
 	private MainBackend backend;
 	
-	public MainApp() {
+	public Minesweeper() {
 		backend = new MainBackend();
-		backend.createNewMineGrid(30, 16, 150);
+		backend.createNewMineGrid(30, 16, 99);
 		
 		gui = new MainGui(backend);
 		
@@ -27,6 +27,6 @@ public class MainApp {
 	}
 	
 	public static void main(String[] args) {
-		new MainApp();
+		new Minesweeper();
 	}
 }
