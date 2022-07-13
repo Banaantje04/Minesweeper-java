@@ -8,22 +8,25 @@ import minesweeper.gui.components.*;
 import minesweeper.gui.components.MineCell.CellState;
 
 public class MineGrid {
+	private MainBackend backend;
 	
 	private boolean[][] grid;
 	private boolean gridGenerated = false;
+	private MineGridGui guiGrid;
 	
-	private GameState gameState = GameState.NotStarted;
+	private GameState gameState = GameState.NOT_STARTED;
 	
 	private int horizontalCount;
 	private int verticalCount;
 	private int amountOfMines;
 	private MineGridCellPressedListener cellListener;
 	
-	public MineGrid(int horizontalCount, int verticalCount, int amountOfMines) {
+	public MineGrid(int horizontalCount, int verticalCount, int amountOfMines, MainBackend backend) {
 
 		this.horizontalCount = horizontalCount;
 		this.verticalCount = verticalCount;
 		this.amountOfMines = amountOfMines;
+		this.backend = backend;
 	}
 	
 	public int[] getDimensions() {
@@ -58,7 +61,7 @@ public class MineGrid {
 
 		System.out.println(Arrays.deepToString(grid).replace("]", "]\n").replace("false", "0").replace("true", "1"));
 		gridGenerated = true;
-		gameState = GameState.Started;
+		gameState = GameState.STARTED;
 	}
 
 	private void addRandomMine(int startPositionHorizontal, int startPositionVertical) {
@@ -104,8 +107,8 @@ public class MineGrid {
 			System.out.println("triggered mine");
 			
 			//weird way to not make it infinitely loop
-			if (gameState != GameState.Failed) {
-				gameState = GameState.Failed;
+			if (gameState != GameState.FAILED) {
+				gameState = GameState.FAILED;
 				for (int i = 0; i < verticalCount; i++) {
 					for (int j = 0; j < horizontalCount; j++) {
 						if (grid[i][j]) {
@@ -150,17 +153,26 @@ public class MineGrid {
 	}
 	
 	private void revealCell(int horizontalPosition, int verticalPosition) {
-		MineCell cell = cellListener.guiGrid.getMineCell(horizontalPosition, verticalPosition);
+		MineCell cell = guiGrid.getMineCell(horizontalPosition, verticalPosition);
 		
 		revealCell(cell, horizontalPosition, verticalPosition);
+	}
+
+	private void checkIfCompleted() {
+		//TODO: add check for completing the board
+		
+		if (gameState == GameState.FAILED || gameState == GameState.FINISHED) {
+			System.out.println("completed " + gameState.toString());
+			guiGrid.disableGrid();
+			backend.completeGame(gameState);
+		}
 	}
 	
 	public class MineGridCellPressedListener extends MouseAdapter {
 		
-		private MineGridGui guiGrid;
 
-		public MineGridCellPressedListener(MineGridGui guiGrid) {
-			this.guiGrid = guiGrid;
+		public MineGridCellPressedListener(MineGridGui gridGui) {
+			guiGrid = gridGui;
 		}
 
 		@Override
@@ -199,13 +211,8 @@ public class MineGrid {
 			
 				revealCell(pressedCell, horizontalPosition, verticalPosition);
 			}
+			
+			checkIfCompleted();
 		}
-	}
-	
-	private enum GameState {
-		NotStarted,
-		Started,
-		Failed,
-		Completed
 	}
 }

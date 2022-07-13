@@ -3,7 +3,7 @@
  */
 package minesweeper;
 
-import minesweeper.backend.MainBackend;
+import minesweeper.backend.*;
 import minesweeper.gui.MainGui;
 
 /**
@@ -16,14 +16,21 @@ public class Minesweeper {
 	private MainBackend backend;
 	
 	public Minesweeper() {
-		backend = new MainBackend();
-		backend.createNewMineGrid(30, 16, 99);
-		
+		backend = new MainBackend(this);
 		gui = new MainGui(backend);
 		
-		gui.generateAndAddMineGrid(backend.getGrid());
+		backend.createNewMineGrid(30, 16, 99);
+		
 		
 		gui.setVisible();
+	}
+
+	public void createGridGui(MineGrid mineGrid) {
+		gui.generateAndAddMineGrid(mineGrid);
+	}
+
+	public CompletionTask showCompletionGui(GameState state) {
+		return gui.showCompletionGui(state);
 	}
 	
 	public static void main(String[] args) {

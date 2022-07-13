@@ -40,4 +40,12 @@ public class MineGridGui extends JPanel{
 	public MineCell getMineCell(int horizontalPosition, int verticalPosition) {
 		return cellGrid[verticalPosition][horizontalPosition];
 	}
+	
+	public void disableGrid() {
+		for (MineCell[] row : cellGrid) {
+			for (MineCell cell : row) {
+				cell.setEnabled(false);
+			}
+		}
+	}
 }

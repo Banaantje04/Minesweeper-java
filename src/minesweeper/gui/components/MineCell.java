@@ -45,6 +45,7 @@ public class MineCell extends JButton {
 		cellState = CellState.IS_FLAGGED;
 		
 		setIcon(new ImageIcon(this.getClass().getResource("/assets/Flag.png")));
+		setDisabledIcon(new ImageIcon(this.getClass().getResource("/assets/Flag.png")));
 	}
 	
 	public void removeFlag() {
