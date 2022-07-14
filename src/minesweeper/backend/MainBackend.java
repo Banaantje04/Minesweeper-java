@@ -25,7 +25,7 @@ public class MainBackend {
 		
 		switch (task) {
 		case PLAY_AGAIN:
-			createNewMineGrid(14, 14, 20);
+			createNewMineGrid(30, 16, 99);
 			break;
 		case NOTHING:
 			break;

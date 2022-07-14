@@ -19,7 +19,7 @@ public class Minesweeper {
 		backend = new MainBackend(this);
 		gui = new MainGui(backend);
 		
-		backend.createNewMineGrid(30, 16, 4);
+		backend.createNewMineGrid(30, 16, 99);
 		
 		
 		gui.setVisible();

@@ -205,14 +205,19 @@ public class MineGrid {
 			}
 			
 			if (SwingUtilities.isRightMouseButton(e)) {
-				pressedCell.flagCell();
-				amountOfCellsFlagged++;
+				if (pressedCell.getCellState() == CellState.NOT_CLICKED) {
+					pressedCell.flagCell();
+					amountOfCellsFlagged++;
+				}
+				else {
+					pressedCell.removeFlag();
+					amountOfCellsFlagged--;
+				}
 			}
-			else if (pressedCell.getCellState() == CellState.IS_FLAGGED) {
-				pressedCell.removeFlag();
-				amountOfCellsFlagged--;
-			}
-			else {			
+			else {
+				if (pressedCell.getCellState() == CellState.IS_FLAGGED) {
+					return;
+				}
 				/*//cheaty reveal everything for debug purposes
 				if (horizontalPosition == 0 && verticalPosition == 0) {
 					for (int i = 0; i < horizontalCount; i++ ) {
