@@ -53,9 +53,25 @@ public class MainGui extends JFrame {
 	}
 
 	public CompletionTask showCompletionGui(GameState state) {
-		//JOptionPane complete = new JOptionPane("A mine exploded. You lost!", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, new String[] { "Play again", "Exit game" }, "Play again");
+		final String[] options = new String[] { "Play again", "Close", "Exit game" };
+		final String defaultOption = "Play again";
 		
-		int chosenTask = JOptionPane.showOptionDialog(this, "A mine exploded. You lost!", "You lost!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[] { "Exit game", "Close", "Play again" }, "Play again");
+		String message;
+		String title;
+		Icon icon;
+		
+		if (state == GameState.FAILED) {
+			message = "A mine exploded. You lost!";
+			title = "You lost!";
+			icon = new ImageIcon(this.getClass().getResource("/assets/Mine.png"));
+		}
+		else {
+			message = "You cleared all the mines. You won!";
+			title = "You won!";
+			icon = new ImageIcon(this.getClass().getResource("/assets/Flag.png"));
+		}
+		
+		int chosenTask = JOptionPane.showOptionDialog(this, message, title, JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, icon, options, defaultOption);
 				
 		return CompletionTask.values()[chosenTask];
 	}

@@ -9,23 +9,30 @@ import minesweeper.gui.components.MineCell.CellState;
 
 public class MineGrid {
 	private MainBackend backend;
+	private MineGridGui guiGrid;
+	private MineGridCellPressedListener cellListener;
 	
 	private boolean[][] grid;
 	private boolean gridGenerated = false;
-	private MineGridGui guiGrid;
 	
 	private GameState gameState = GameState.NOT_STARTED;
+	private int amountOfCellsCleared = 0;
+	private int amountOfCellsFlagged = 0;
 	
 	private int horizontalCount;
 	private int verticalCount;
 	private int amountOfMines;
-	private MineGridCellPressedListener cellListener;
+	private int totalAmountOfCells;
 	
 	public MineGrid(int horizontalCount, int verticalCount, int amountOfMines, MainBackend backend) {
 
 		this.horizontalCount = horizontalCount;
 		this.verticalCount = verticalCount;
+		
+		this.totalAmountOfCells = horizontalCount * verticalCount;
+		
 		this.amountOfMines = amountOfMines;
+		
 		this.backend = backend;
 	}
 	
@@ -150,6 +157,8 @@ public class MineGrid {
 				}
 			}
 		}
+		
+		amountOfCellsCleared++;
 	}
 	
 	private void revealCell(int horizontalPosition, int verticalPosition) {
@@ -159,7 +168,9 @@ public class MineGrid {
 	}
 
 	private void checkIfCompleted() {
-		//TODO: add check for completing the board
+		if (amountOfCellsCleared == totalAmountOfCells-amountOfMines && amountOfCellsFlagged == amountOfMines) {
+			gameState = GameState.FINISHED;
+		}
 		
 		if (gameState == GameState.FAILED || gameState == GameState.FINISHED) {
 			System.out.println("completed " + gameState.toString());
@@ -195,22 +206,25 @@ public class MineGrid {
 			
 			if (SwingUtilities.isRightMouseButton(e)) {
 				pressedCell.flagCell();
+				amountOfCellsFlagged++;
 			}
 			else if (pressedCell.getCellState() == CellState.IS_FLAGGED) {
 				pressedCell.removeFlag();
+				amountOfCellsFlagged--;
 			}
 			else {			
-				//cheaty reveal everything for debug purposes
+				/*//cheaty reveal everything for debug purposes
 				if (horizontalPosition == 0 && verticalPosition == 0) {
 					for (int i = 0; i < horizontalCount; i++ ) {
 						for (int j = 0; j < verticalCount; j++) {
 							revealCell(i, j);
 						}
 					}
-				}
+				}*/
 			
 				revealCell(pressedCell, horizontalPosition, verticalPosition);
 			}
+			guiGrid.repaint();
 			
 			checkIfCompleted();
 		}

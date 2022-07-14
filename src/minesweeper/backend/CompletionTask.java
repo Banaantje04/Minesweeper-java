@@ -1,7 +1,7 @@
 package minesweeper.backend;
 
 public enum CompletionTask {
-	EXIT_GAME,
+	PLAY_AGAIN,
 	NOTHING,
-	PLAY_AGAIN
+	EXIT_GAME
 }
