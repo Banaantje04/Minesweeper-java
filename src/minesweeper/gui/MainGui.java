@@ -9,7 +9,6 @@ import minesweeper.gui.components.MineGridGui;
 public class MainGui extends JFrame {
 	private Container pane;
 	private MainBackend backend;
-	private MineGridGui gridGui;
 	
 	public MainGui(MainBackend backend) {
 		/*try {
@@ -32,23 +31,14 @@ public class MainGui extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		pane = getContentPane();
-		pane.setLayout(new GridBagLayout());
+		pane = new NewGameGui(this);
+		
+		setContentPane(pane);
 	}
 	
 	public void generateAndAddMineGrid(MineGrid grid) {
-		if (gridGui != null) {
-			pane.remove(gridGui);
-		}
-		
-		gridGui = new MineGridGui(grid);
-		
-		GridBagConstraints constraint = new GridBagConstraints();
-		constraint.weightx = 1.0;
-		constraint.weighty = 1.0;
-		constraint.fill = GridBagConstraints.BOTH;
-		
-		pane.add(gridGui, constraint);
+		pane = new GameGui(grid);
+		setContentPane(pane);
 		pack();
 	}
 
