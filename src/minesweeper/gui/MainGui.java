@@ -30,9 +30,11 @@ public class MainGui extends JFrame {
 		this.backend = backend;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		pane = new NewGameGui(this);
-		
+	}
+	
+	public void createNewGameGui(NewGame newGame) {
+		pane = new NewGameGui(newGame);
+
 		setContentPane(pane);
 	}
 	

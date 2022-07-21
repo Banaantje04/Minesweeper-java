@@ -4,6 +4,7 @@ import minesweeper.Minesweeper;
 
 public class MainBackend {
 	
+	private NewGame newGame;
 	private MineGrid mineGrid;
 	private Minesweeper main;
 	
@@ -11,12 +12,17 @@ public class MainBackend {
 		this.main = main;
 	}
 	
+	public void createNewGame() {
+		newGame = new NewGame(this);
+		main.createNewGameGui(newGame);
+	}
+
 	public MineGrid getGrid() {
 		return mineGrid;
 	}
 	
-	public void createNewMineGrid(int horizontalCount, int verticalCount, int amountOfMines) {
-		mineGrid = new MineGrid(horizontalCount, verticalCount, amountOfMines, this);
+	public void createNewMineGrid(DifficultySettings settings) {
+		mineGrid = new MineGrid(settings, this);
 		main.createGridGui(mineGrid);
 	}
 	
@@ -25,7 +31,7 @@ public class MainBackend {
 		
 		switch (task) {
 		case PLAY_AGAIN:
-			createNewMineGrid(30, 16, 99);
+			createNewGame();
 			break;
 		case NOTHING:
 			break;

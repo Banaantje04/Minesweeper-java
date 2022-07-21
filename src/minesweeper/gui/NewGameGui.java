@@ -7,9 +7,11 @@ import java.awt.Insets;
 
 import javax.swing.*;
 
+import minesweeper.backend.NewGame;
+
 public class NewGameGui extends JPanel {
 	
-	public NewGameGui(MainGui mainGui) {
+	public NewGameGui(NewGame newGame) {
 		setLayout(new GridBagLayout());
 		
 		GridBagConstraints constraint = new GridBagConstraints();
@@ -40,5 +42,9 @@ public class NewGameGui extends JPanel {
 		constraint.gridy = 4;
 		constraint.insets = new Insets(0, 10, 10, 10);
 		add(customButton, constraint);
+	}
+
+	public void showCustomMenu() {
+		//TODO add custom parameters
 	}
 }

@@ -10,7 +10,6 @@ import minesweeper.gui.components.MineCell.CellState;
 public class MineGrid {
 	private MainBackend backend;
 	private MineGridGui guiGrid;
-	private MineGridCellPressedListener cellListener;
 	
 	private boolean[][] grid;
 	private boolean gridGenerated = false;
@@ -24,14 +23,14 @@ public class MineGrid {
 	private int amountOfMines;
 	private int totalAmountOfCells;
 	
-	public MineGrid(int horizontalCount, int verticalCount, int amountOfMines, MainBackend backend) {
+	public MineGrid(DifficultySettings settings, MainBackend backend) {
 
-		this.horizontalCount = horizontalCount;
-		this.verticalCount = verticalCount;
+		horizontalCount = settings.horizontalCount();
+		verticalCount = settings.verticalCount();
 		
-		this.totalAmountOfCells = horizontalCount * verticalCount;
+		totalAmountOfCells = horizontalCount * verticalCount;
 		
-		this.amountOfMines = amountOfMines;
+		amountOfMines = settings.amountOfMines();
 		
 		this.backend = backend;
 	}
@@ -46,9 +45,7 @@ public class MineGrid {
 	}
 	
 	public MineGridCellPressedListener initialiseCellListener(MineGridGui guiGrid) {
-		cellListener = new MineGridCellPressedListener(guiGrid);
-		
-		return cellListener;
+		return new MineGridCellPressedListener(guiGrid);
 	}
 
 	private void generateRandomLayout(int startPositionHorizontal, int startPositionVertical) {
