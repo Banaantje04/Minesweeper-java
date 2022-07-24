@@ -36,10 +36,12 @@ public class MainGui extends JFrame {
 		pane = new NewGameGui(newGame);
 
 		setContentPane(pane);
+		pack();
 	}
 	
 	public void generateAndAddMineGrid(MineGrid grid) {
 		pane = new GameGui(grid);
+		
 		setContentPane(pane);
 		pack();
 	}
