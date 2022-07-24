@@ -30,12 +30,15 @@ public class MainGui extends JFrame {
 		this.backend = backend;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Minesweeper");
 	}
 	
 	public void createNewGameGui(NewGame newGame) {
-		pane = new NewGameGui(newGame);
+		pane = new NewGameGui(newGame, this);
 
 		setContentPane(pane);
+		
+		//i don't like this pack but it is needed to display the menu (repaint doesn't work...)
 		pack();
 	}
 	

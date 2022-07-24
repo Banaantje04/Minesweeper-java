@@ -1,9 +1,6 @@
 package minesweeper.gui;
 
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 
 import javax.swing.*;
 
@@ -12,15 +9,16 @@ import minesweeper.backend.NewGame.ButtonActionListener;
 
 public class NewGameGui extends JPanel {
 	
-	public NewGameGui(NewGame newGame) {
-		if (newGame == null) {
-			System.out.println("newgame backend is null");
-		}
+	private MainGui mainGui;
+	
+	public NewGameGui(NewGame newGame, MainGui mainGui) {
+		this.mainGui = mainGui;
 		
 		setLayout(new GridBagLayout());
 		
 		GridBagConstraints constraint = new GridBagConstraints();
 		constraint.gridx = 0;
+		constraint.gridy = GridBagConstraints.RELATIVE;
 		
 		ButtonActionListener actionListener = newGame.initialiseListener(this);
 		
@@ -29,33 +27,60 @@ public class NewGameGui extends JPanel {
 		label.setFont(new Font(font.getName(), Font.PLAIN, 15));
 		
 		constraint.insets = new Insets(10, 10, 0, 10);
-		constraint.gridy = 0;
 		add(label, constraint);
 		
 		JButton easyButton = new JButton("Beginner");
 		easyButton.addActionListener(actionListener);
-		constraint.gridy = 1;
 		constraint.insets = new Insets(0, 10, 0, 10);
 		add(easyButton, constraint);
 		
 		JButton mediumButton = new JButton("Intermediate");
 		mediumButton.addActionListener(actionListener);
-		constraint.gridy = 2;
 		add(mediumButton, constraint);
 		
 		JButton hardButton = new JButton("Expert");
 		hardButton.addActionListener(actionListener);
-		constraint.gridy = 3;
 		add(hardButton, constraint);
 		
 		JButton customButton = new JButton("Custom");
 		customButton.addActionListener(actionListener);
-		constraint.gridy = 4;
 		constraint.insets = new Insets(0, 10, 10, 10);
 		add(customButton, constraint);
 	}
 
 	public void showCustomMenu() {
+		GridBagConstraints constraint = new GridBagConstraints();
+		constraint.gridx = 1;
+		constraint.gridy = GridBagConstraints.RELATIVE;
 		
+		JLabel topLabel = new JLabel("Custom settings");
+		Font font = topLabel.getFont();
+		topLabel.setFont(new Font(font.getName(), Font.PLAIN, 15));
+		
+		constraint.insets = new Insets(10, 10, 0, 10);
+		constraint.gridwidth = 2;
+		add(topLabel, constraint);
+		
+		JLabel horizontalLabel = new JLabel("Horizontal columns:");
+		constraint.gridwidth = 1;
+		add(horizontalLabel, constraint);
+		
+		JLabel verticalLabel = new JLabel("Vertical rows:");
+		add(verticalLabel, constraint);
+		
+		JLabel amountOfBombsLabel = new JLabel("Amount of bombs:");
+		add(amountOfBombsLabel, constraint);
+		
+		JTextField horizontalCountField = new JTextField(5);
+		constraint.gridx = 2;
+		add(horizontalCountField, constraint);
+		
+		JTextField verticalCountField = new JTextField(5);
+		add(verticalCountField, constraint);
+		
+		JTextField bombCountField = new JTextField(5);
+		add(bombCountField, constraint);
+		
+		mainGui.pack();
 	}
 }

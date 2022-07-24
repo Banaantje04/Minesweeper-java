@@ -60,7 +60,7 @@ public class NewGame {
 			
 			System.out.println("Selected difficulty is: " + settings);
 			
-			backend.createNewMineGrid(settings);
+			//backend.createNewMineGrid(settings);
 		}
 		
 		private enum GameDifficulty {
