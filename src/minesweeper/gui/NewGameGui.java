@@ -11,6 +11,8 @@ public class NewGameGui extends JPanel {
 	
 	private MainGui mainGui;
 	
+	private JTextField[] customSettings = new JTextField[3];
+	
 	public NewGameGui(NewGame newGame, MainGui mainGui) {
 		this.mainGui = mainGui;
 		
@@ -26,12 +28,12 @@ public class NewGameGui extends JPanel {
 		Font font = label.getFont();
 		label.setFont(new Font(font.getName(), Font.PLAIN, 15));
 		
-		constraint.insets = new Insets(10, 10, 0, 10);
+		constraint.insets = new Insets(10, 10, 5, 10);
 		add(label, constraint);
 		
 		JButton easyButton = new JButton("Beginner");
 		easyButton.addActionListener(actionListener);
-		constraint.insets = new Insets(0, 10, 0, 10);
+		constraint.insets = new Insets(0, 10, 5, 10);
 		add(easyButton, constraint);
 		
 		JButton mediumButton = new JButton("Intermediate");
@@ -57,11 +59,12 @@ public class NewGameGui extends JPanel {
 		Font font = topLabel.getFont();
 		topLabel.setFont(new Font(font.getName(), Font.PLAIN, 15));
 		
-		constraint.insets = new Insets(10, 10, 0, 10);
+		constraint.insets = new Insets(10, 10, 5, 10);
 		constraint.gridwidth = 2;
 		add(topLabel, constraint);
 		
 		JLabel horizontalLabel = new JLabel("Horizontal columns:");
+		constraint.insets = new Insets(0, 10, 5, 10);
 		constraint.gridwidth = 1;
 		add(horizontalLabel, constraint);
 		
@@ -72,15 +75,28 @@ public class NewGameGui extends JPanel {
 		add(amountOfBombsLabel, constraint);
 		
 		JTextField horizontalCountField = new JTextField(5);
+		customSettings[0] = horizontalCountField;
 		constraint.gridx = 2;
 		add(horizontalCountField, constraint);
 		
 		JTextField verticalCountField = new JTextField(5);
+		customSettings[1] = verticalCountField;
 		add(verticalCountField, constraint);
 		
 		JTextField bombCountField = new JTextField(5);
+		customSettings[2] = bombCountField;
 		add(bombCountField, constraint);
 		
+		JButton confirmButton = new JButton("Confirm");
+		constraint.insets = new Insets(0, 10, 10, 10);
+		constraint.gridwidth = 2;
+		constraint.gridx = 1;
+		add(confirmButton, constraint);
+		
 		mainGui.pack();
+	}
+
+	public JTextField[] getCustomSettings() {
+		return customSettings;
 	}
 }
