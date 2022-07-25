@@ -20,8 +20,12 @@ public class NewGame {
 		backend = mainBackend;
 	}
 	
-	public ButtonActionListener initialiseListener(NewGameGui gui) {
-		return new ButtonActionListener(gui);
+	public DifficultyButtonActionListener initialiseDifficultyButtonActionListener(NewGameGui gui) {
+		return new DifficultyButtonActionListener(gui);
+	}
+	
+	public CustomSettingsActionListener initialiseCustomSettingsActionListener() {
+		return new CustomSettingsActionListener();
 	}
 
 	public DifficultySettings getCustomSettings() {
@@ -34,9 +38,9 @@ public class NewGame {
 		return new DifficultySettings(horizontalCount, verticalCount, amountOfBombs);
 	}
 	
-	public class ButtonActionListener implements ActionListener {
+	public class DifficultyButtonActionListener implements ActionListener {
 		
-		public ButtonActionListener(NewGameGui gui) {
+		public DifficultyButtonActionListener(NewGameGui gui) {
 			newGameGui = gui;
 		}
 
@@ -46,17 +50,12 @@ public class NewGame {
 			NewGameButtonChoice choice = NewGameButtonChoice.valueOf(e.getActionCommand().toUpperCase());
 			System.out.println(choice);
 			
-			DifficultySettings settings;
-			
 			if (choice == NewGameButtonChoice.CUSTOM) {
 				newGameGui.showCustomMenu();
 			}
-			else if (choice == NewGameButtonChoice.CUSTOMCONFIRM) {
-				settings = getCustomSettings();
-				
-				backend.createNewMineGrid(settings);
-			}
 			else {
+				DifficultySettings settings;
+				
 				switch (choice) {
 				case BEGINNER:
 					System.out.println("EASY");
@@ -85,8 +84,22 @@ public class NewGame {
 			BEGINNER,
 			INTERMEDIATE,
 			EXPERT,
-			CUSTOM,
-			CUSTOMCONFIRM
+			CUSTOM
+		}
+		
+	}
+	
+	public class CustomSettingsActionListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//TODO add echecking for invalid configurations
+			
+			DifficultySettings settings = getCustomSettings();
+			
+			System.out.println("Selected difficulty is: " + settings);
+			
+			backend.createNewMineGrid(settings);
 		}
 		
 	}

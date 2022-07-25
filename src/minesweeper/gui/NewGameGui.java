@@ -5,16 +5,19 @@ import java.awt.*;
 import javax.swing.*;
 
 import minesweeper.backend.NewGame;
-import minesweeper.backend.NewGame.ButtonActionListener;
+import minesweeper.backend.NewGame.CustomSettingsActionListener;
+import minesweeper.backend.NewGame.DifficultyButtonActionListener;
 
 public class NewGameGui extends JPanel {
 	
 	private MainGui mainGui;
+	private NewGame newGame;
 	
 	private JTextField[] customSettings = new JTextField[3];
 	
 	public NewGameGui(NewGame newGame, MainGui mainGui) {
 		this.mainGui = mainGui;
+		this.newGame = newGame;
 		
 		setLayout(new GridBagLayout());
 		
@@ -22,7 +25,7 @@ public class NewGameGui extends JPanel {
 		constraint.gridx = 0;
 		constraint.gridy = GridBagConstraints.RELATIVE;
 		
-		ButtonActionListener actionListener = newGame.initialiseListener(this);
+		DifficultyButtonActionListener actionListener = newGame.initialiseDifficultyButtonActionListener(this);
 		
 		JLabel label = new JLabel("Create a new game");
 		Font font = label.getFont();
@@ -74,20 +77,26 @@ public class NewGameGui extends JPanel {
 		JLabel amountOfBombsLabel = new JLabel("Amount of bombs:");
 		add(amountOfBombsLabel, constraint);
 		
+		CustomSettingsActionListener actionListener = newGame.initialiseCustomSettingsActionListener();
+		
 		JTextField horizontalCountField = new JTextField(5);
+		horizontalCountField.addActionListener(actionListener);
 		customSettings[0] = horizontalCountField;
 		constraint.gridx = 2;
 		add(horizontalCountField, constraint);
 		
 		JTextField verticalCountField = new JTextField(5);
+		verticalCountField.addActionListener(actionListener);
 		customSettings[1] = verticalCountField;
 		add(verticalCountField, constraint);
 		
 		JTextField bombCountField = new JTextField(5);
+		bombCountField.addActionListener(actionListener);
 		customSettings[2] = bombCountField;
 		add(bombCountField, constraint);
 		
 		JButton confirmButton = new JButton("Confirm");
+		confirmButton.addActionListener(actionListener);
 		constraint.insets = new Insets(0, 10, 10, 10);
 		constraint.gridwidth = 2;
 		constraint.gridx = 1;
