@@ -37,6 +37,25 @@ public class NewGame {
 		
 		return new DifficultySettings(horizontalCount, verticalCount, amountOfBombs);
 	}
+
+	public boolean checkIfValidSettings(DifficultySettings settings) {
+		
+		/* the amount of mines can't be more than 9 less than the total amount of cells
+		 * this is needed because the starting cell and the 8 surrounding cells need to be empty
+		 */
+		if (settings.amountOfMines() > settings.horizontalCount()*settings.verticalCount()-9) {
+			return false;
+		}
+		
+		/* the rows and columns cannot be 0
+		 * this would make an invisible and thus unusable grid
+		 */
+		if (settings.horizontalCount() == 0 || settings.verticalCount() == 0) {
+			return false;
+		}
+		
+		return true;
+	}
 	
 	public class DifficultyButtonActionListener implements ActionListener {
 		
@@ -93,9 +112,12 @@ public class NewGame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			//TODO add echecking for invalid configurations
-			
 			DifficultySettings settings = getCustomSettings();
+			
+			if (!checkIfValidSettings(settings)) {
+				//TODO give alert
+				return;
+			}
 			
 			System.out.println("Selected difficulty is: " + settings);
 			
