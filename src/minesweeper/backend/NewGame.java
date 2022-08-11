@@ -3,9 +3,11 @@ package minesweeper.backend;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
 
 import minesweeper.gui.NewGameGui;
+import minesweeper.gui.NewGameGui.CustomSettingsErrors;
 
 public class NewGame {
 	
@@ -29,32 +31,51 @@ public class NewGame {
 	}
 
 	public DifficultySettings getCustomSettings() {
-		JTextField[] settingFields = newGameGui.getCustomSettings();
+		JFormattedTextField[] settingFields = newGameGui.getCustomSettings();
 		
-		int horizontalCount = Integer.parseInt(settingFields[0].getText());
-		int verticalCount = Integer.parseInt(settingFields[1].getText());
-		int amountOfBombs = Integer.parseInt(settingFields[2].getText());
-		
+		//these object to long to int casts are necessary, for some reason i couldn't cast directly to int
+		int horizontalCount = (int)(long)settingFields[0].getValue();
+		int verticalCount = (int)(long)settingFields[1].getValue();
+		int amountOfBombs = (int)(long)settingFields[2].getValue();
+
 		return new DifficultySettings(horizontalCount, verticalCount, amountOfBombs);
 	}
 
-	public boolean checkIfValidSettings(DifficultySettings settings) {
+	public CustomSettingsErrors[] checkIfValidSettings(DifficultySettings settings) {
+		CustomSettingsErrors[] errorList = new CustomSettingsErrors[0];
 		
 		/* the amount of mines can't be more than 9 less than the total amount of cells
 		 * this is needed because the starting cell and the 8 surrounding cells need to be empty
 		 */
 		if (settings.amountOfMines() > settings.horizontalCount()*settings.verticalCount()-9) {
-			return false;
+			errorList = addErrorToList(errorList, CustomSettingsErrors.TOOMANYBOMBS);
 		}
 		
 		/* the rows and columns cannot be 0
 		 * this would make an invisible and thus unusable grid
 		 */
-		if (settings.horizontalCount() == 0 || settings.verticalCount() == 0) {
-			return false;
+		if (settings.horizontalCount() == 0) {
+			errorList = addErrorToList(errorList, CustomSettingsErrors.HORIZONTALZERO);
 		}
 		
-		return true;
+		if (settings.verticalCount() == 0) {
+			errorList = addErrorToList(errorList, CustomSettingsErrors.VERTICALZERO);
+		}
+		
+		return errorList;
+	}
+
+	//TODO: i really should start using that apache thingy because using arrays for these things is just silly
+	private CustomSettingsErrors[] addErrorToList(CustomSettingsErrors[] errorList, CustomSettingsErrors error) {
+		int length = errorList.length;
+		CustomSettingsErrors[] tempList = errorList;
+		errorList = new CustomSettingsErrors[length + 1];
+		for (int i = 0; i < length; i++) {
+			errorList[i] = tempList[i];
+		}
+		errorList[length] = error;
+		
+		return errorList;
 	}
 	
 	public class DifficultyButtonActionListener implements ActionListener {
@@ -114,8 +135,10 @@ public class NewGame {
 		public void actionPerformed(ActionEvent e) {
 			DifficultySettings settings = getCustomSettings();
 			
-			if (!checkIfValidSettings(settings)) {
-				//TODO give alert
+			CustomSettingsErrors[] errors = checkIfValidSettings(settings);
+			
+			if (errors.length != 0) {
+				newGameGui.showCustomSettingsErrors(errors);
 				return;
 			}
 			

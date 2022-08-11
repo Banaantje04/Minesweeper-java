@@ -1,6 +1,7 @@
 package minesweeper.gui;
 
 import java.awt.*;
+import java.text.NumberFormat;
 
 import javax.swing.*;
 
@@ -13,7 +14,9 @@ public class NewGameGui extends JPanel {
 	private MainGui mainGui;
 	private NewGame newGame;
 	
-	private JTextField[] customSettings = new JTextField[3];
+	private boolean showedCustomSettings = false;
+	
+	private JFormattedTextField[] customSettings = new JFormattedTextField[3];
 	
 	public NewGameGui(NewGame newGame, MainGui mainGui) {
 		this.mainGui = mainGui;
@@ -54,6 +57,10 @@ public class NewGameGui extends JPanel {
 	}
 
 	public void showCustomMenu() {
+		if (showedCustomSettings) {
+			return;
+		}
+		
 		GridBagConstraints constraint = new GridBagConstraints();
 		constraint.gridx = 1;
 		constraint.gridy = GridBagConstraints.RELATIVE;
@@ -67,7 +74,8 @@ public class NewGameGui extends JPanel {
 		add(topLabel, constraint);
 		
 		JLabel horizontalLabel = new JLabel("Horizontal columns:");
-		constraint.insets = new Insets(0, 10, 5, 10);
+		constraint.anchor = GridBagConstraints.LINE_END;
+		constraint.insets = new Insets(0, 10, 5, 5);
 		constraint.gridwidth = 1;
 		add(horizontalLabel, constraint);
 		
@@ -78,34 +86,55 @@ public class NewGameGui extends JPanel {
 		add(amountOfBombsLabel, constraint);
 		
 		CustomSettingsActionListener actionListener = newGame.initialiseCustomSettingsActionListener();
+		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		
-		JTextField horizontalCountField = new JTextField(5);
+		JFormattedTextField horizontalCountField = new JFormattedTextField(numberFormat);
+		horizontalCountField.setColumns(5);
 		horizontalCountField.addActionListener(actionListener);
 		customSettings[0] = horizontalCountField;
+		constraint.insets = new Insets(0, 5, 5, 10);
+		constraint.anchor = GridBagConstraints.LINE_START;
 		constraint.gridx = 2;
 		add(horizontalCountField, constraint);
 		
-		JTextField verticalCountField = new JTextField(5);
+		JFormattedTextField verticalCountField = new JFormattedTextField(numberFormat);
+		verticalCountField.setColumns(5);
 		verticalCountField.addActionListener(actionListener);
 		customSettings[1] = verticalCountField;
 		add(verticalCountField, constraint);
 		
-		JTextField bombCountField = new JTextField(5);
+		JFormattedTextField bombCountField = new JFormattedTextField(numberFormat);
+		bombCountField.setColumns(5);
 		bombCountField.addActionListener(actionListener);
 		customSettings[2] = bombCountField;
 		add(bombCountField, constraint);
 		
 		JButton confirmButton = new JButton("Confirm");
 		confirmButton.addActionListener(actionListener);
+		constraint.anchor = GridBagConstraints.CENTER;
 		constraint.insets = new Insets(0, 10, 10, 10);
 		constraint.gridwidth = 2;
 		constraint.gridx = 1;
 		add(confirmButton, constraint);
 		
+		showedCustomSettings = true;
+		
 		mainGui.pack();
 	}
 
-	public JTextField[] getCustomSettings() {
+	public void showCustomSettingsErrors(CustomSettingsErrors[] errors) {
+		//TODO: better messages than just these enum names
+		JOptionPane.showMessageDialog(mainGui, errors, "Errors", JOptionPane.ERROR_MESSAGE, new ImageIcon(this.getClass().getResource("/assets/Mine.png")));
+	}
+
+	public JFormattedTextField[] getCustomSettings() {
 		return customSettings;
+	}
+	
+	public enum CustomSettingsErrors {
+		TOOMANYBOMBS,
+		HORIZONTALZERO,
+		VERTICALZERO,
+		
 	}
 }
