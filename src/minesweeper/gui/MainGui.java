@@ -31,6 +31,7 @@ public class MainGui extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Minesweeper");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/assets/Flag.png")));
 	}
 	
 	public void createNewGameGui(NewGame newGame) {
